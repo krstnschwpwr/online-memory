@@ -1,0 +1,106 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link href='https://fonts.googleapis.com/css?family=Raleway+Dots' rel='stylesheet' type='text/css'>
+      <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto+Mono&subset=cyrillic&effect=anaglyph">
+    <style>
+        table {
+            border-spacing: 10px;
+            margin-top: 40px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        td {
+            background-color: darkcyan;
+            border-radius: 2px;
+            width: 70px;
+            height: 70px;
+        }
+        
+        p {
+            color: white;
+            text-align: center;
+            font-family: 'Raleway Dots', cursive;
+            font-size: 20px;
+        }
+        h2{
+            text-align: center;
+            color: black;
+            font-family: Roboto Mono;
+            font-weight: 300;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+</head>
+
+<body>
+    <div id=memory>
+        <table id=field><h2 class="font-effect-anaglyph"> Memory</h3></table>
+    </div>
+    <script>
+        var arr = 0;
+        var array = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
+        var firstChar;
+        var secondChar;
+        var firstFlip;
+        var secondFlip;
+        var flipCounter = 0;
+        var couple;
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        $(document).ready(function() {
+            //when doc ready to load, generate random numbers in array
+            for (var i = 0; i < array.length; i++) {
+                var other = getRandomInt(0, 15);
+                var arr = array[i];
+                array[i] = array[other];
+                array[other] = arr;
+            }
+            var r;
+            var counter = 1; //=id
+            //create table
+            for (var y = 0; y < 2; y++) {
+                r += "<tr> ";
+                for (var x = 0; x < 8; x++) {
+
+                    r += "<td id=" + counter + ">" + "<p>" + array[y * 6 + x] + "</p>" + "</td>";
+                    counter += 1;
+                }
+                r += "</tr>";
+            }
+            //get content of array
+            $("#field").html(r);
+            //hide array values
+            $('p').hide();
+            $("#field td").click(function() {
+                //find id attribute of first td
+                var id = $(this).attr("id");
+                $(this).find('p').show();
+                var number = id;
+                //show up p when clicked
+                if (flipCounter == 0) { //before 1st click
+                    flipCounter += 1;
+                    firstChar = $(this).find('p').text();
+                    firstFlip = id;
+                } else if (flipCounter == 1) { // clicked once
+                    secondChar = $(this).find('p').text();
+                    secondFlip = id;
+                    if (firstChar == secondChar) { //matching chars
+                        $("#" + firstFlip).css("background-color", "burlywood");
+                        $("#" + secondFlip).css("background-color", "burlywood");
+                        flipCounter = 0;
+                    } else {
+                        $("#" + firstFlip).find("p").hide(1000);
+                        $("#" + secondFlip).find("p").hide(1000);
+                        flipCounter = 0;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
